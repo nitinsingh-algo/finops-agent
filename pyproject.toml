@@ -1,0 +1,60 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "algo-finops"
+version = "0.1.0"
+description = "Algo-Finops agent platform. IAC is the first LangGraph sub-agent."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "langgraph>=0.2.0",
+    "langchain-core>=0.3.0",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "pydantic>=2.9.0",
+    "pydantic-settings>=2.6.0",
+    "sqlalchemy[asyncio]>=2.0.36",
+    "aiosqlite>=0.20.0",
+    "cryptography>=44.0.0",
+    "PyJWT>=2.9.0",
+    "httpx>=0.27.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+]
+
+[project.scripts]
+iac = "algo_finops.agents.iac.cli:main"
+
+[project.entry-points."algo_finops.iac.analyzers"]
+terraform = "algo_finops.agents.iac.analysis.analyzers:TerraformAnalyzer"
+terragrunt = "algo_finops.agents.iac.analysis.analyzers:TerragruntAnalyzer"
+pulumi = "algo_finops.agents.iac.analysis.analyzers:PulumiAnalyzer"
+cdk = "algo_finops.agents.iac.analysis.analyzers:CdkAnalyzer"
+cloudformation = "algo_finops.agents.iac.analysis.analyzers:CloudFormationAnalyzer"
+kubernetes = "algo_finops.agents.iac.analysis.analyzers:KubernetesAnalyzer"
+helm = "algo_finops.agents.iac.analysis.analyzers:HelmAnalyzer"
+ansible = "algo_finops.agents.iac.analysis.analyzers:AnsibleAnalyzer"
+docker = "algo_finops.agents.iac.analysis.analyzers:DockerAnalyzer"
+compose = "algo_finops.agents.iac.analysis.analyzers:ComposeAnalyzer"
+bicep = "algo_finops.agents.iac.analysis.analyzers:BicepAnalyzer"
+runtime = "algo_finops.agents.iac.analysis.analyzers:RuntimeAnalyzer"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/algo_finops"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
